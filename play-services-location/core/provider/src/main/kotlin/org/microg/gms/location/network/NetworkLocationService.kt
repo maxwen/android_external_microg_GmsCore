@@ -222,9 +222,10 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
                     else -> cacheLocation
                 }?.takeIf { candidate == null || it.accuracy < candidate?.accuracy!! } ?: candidate
             } catch (e: Exception) {
-                Log.w(TAG, "Failed retrieving location for ${requestableWifis.size} wifi networks", e)
                 if (e is ServiceException && e.error.code == 404 || e is VolleyError && e.networkResponse?.statusCode == 404) {
                     requestableWifis.hash()?.let { wifiScanCache[it.toHexString()] = NEGATIVE_CACHE_ENTRY }
+                } else {
+                    Log.w(TAG, "Failed retrieving location for ${requestableWifis.size} wifi networks", e)
                 }
             }
         }

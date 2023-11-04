@@ -522,10 +522,10 @@
         <!-- microG Settings activity -->
         <activity
             android:name="org.microg.gms.ui.MainSettingsActivity"
-            android:icon="@mipmap/ic_app_settings"
+            android:icon="@mipmap/ic_app"
             android:label="@string/gms_settings_name"
             android:process=":ui"
-            android:roundIcon="@mipmap/ic_app_settings"
+            android:roundIcon="@mipmap/ic_app"
             android:taskAffinity="org.microg.gms.settings">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -550,9 +550,9 @@
         <!-- microG Settings activity-alias shown in Launcher -->
         <activity-alias
             android:name="org.microg.gms.ui.SettingsActivity"
-            android:icon="@mipmap/ic_app_settings"
+            android:icon="@mipmap/ic_app"
             android:label="@string/gms_settings_name"
-            android:roundIcon="@mipmap/ic_app_settings"
+            android:roundIcon="@mipmap/ic_app"
             android:process=":ui"
             android:targetActivity="org.microg.gms.ui.MainSettingsActivity"
             android:taskAffinity="org.microg.gms.settings">
@@ -565,16 +565,16 @@
 
         <activity
             android:name="org.microg.gms.ui.SettingsDashboardActivity"
-            android:icon="@mipmap/ic_app_settings"
+            android:icon="@mipmap/ic_app"
             android:label="Legacy microG Settings"
             android:process=":ui"
-            android:roundIcon="@mipmap/ic_app_settings"
+            android:roundIcon="@mipmap/ic_app"
             android:taskAffinity="org.microg.gms.settings" />
 
         <!-- microG Settings embedded in System Settings on SDK 23 and newer -->
         <activity-alias
             android:name="org.microg.gms.ui.SettingsActivityLink"
-            android:icon="@mipmap/ic_app_settings"
+            android:icon="@mipmap/ic_app"
             android:label="@string/gms_settings_name"
             android:process=":ui"
             android:targetActivity="org.microg.gms.ui.MainSettingsActivity"
@@ -585,7 +585,7 @@
 
             <meta-data
                 android:name="com.android.settings.category"
-                android:value="com.android.settings.category.device" />
+                android:value="com.android.settings.category.ia.system" />
             <meta-data
                 android:name="com.android.settings.icon"
                 android:resource="@drawable/ic_app_settings_system" />

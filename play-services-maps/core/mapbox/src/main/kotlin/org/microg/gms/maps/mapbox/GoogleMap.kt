@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.internal.*
 import com.mapbox.mapboxsdk.LibraryLoader
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.R
+
 import com.mapbox.mapboxsdk.camera.CameraUpdate
 import com.mapbox.mapboxsdk.constants.MapboxConstants
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
@@ -75,6 +76,25 @@ fun runOnMainLooper(forceQueue: Boolean = false, method: () -> Unit) {
             method()
         }
     }
+}
+
+private fun getProperty(
+        context: Context,
+        key: String
+    ): String {
+        try {
+            val systemProperties = context.classLoader.loadClass(
+                "android.os.SystemProperties"
+            )
+            val get = systemProperties.getMethod(
+                "get", *arrayOf<Class<*>>(
+                    String::class.java, String::class.java
+                )
+            )
+            return get.invoke(null, key, "") as String
+        } catch (e: java.lang.Exception) {
+        }
+        return ""
 }
 
 class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractGoogleMap(context) {
@@ -131,8 +151,9 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     init {
         BitmapDescriptorFactoryImpl.initialize(mapContext.resources, context.resources)
         LibraryLoader.setLibraryLoader(MultiArchLoader(mapContext, context))
+        val mapboxKeyProp = getProperty(mapContext, "persist.mapbox.key");
         runOnMainLooper {
-            Mapbox.getInstance(mapContext, BuildConfig.MAPBOX_KEY, WellKnownTileServer.Mapbox)
+            Mapbox.getInstance(mapContext, if (mapboxKeyProp.length != 0) mapboxKeyProp else BuildConfig.MAPBOX_KEY , WellKnownTileServer.Mapbox)
         }
 
 

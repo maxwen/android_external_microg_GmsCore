@@ -66,6 +66,25 @@ class MetaSnapshot(
     )
 }
 
+private fun getProperty(
+        context: Context,
+        key: String
+    ): String {
+        try {
+            val systemProperties = context.classLoader.loadClass(
+                "android.os.SystemProperties"
+            )
+            val get = systemProperties.getMethod(
+                "get", *arrayOf<Class<*>>(
+                    String::class.java, String::class.java
+                )
+            )
+            return get.invoke(null, key, "") as String
+        } catch (e: java.lang.Exception) {
+        }
+        return ""
+}
+
 class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractGoogleMap(context) {
 
     internal val view: FrameLayout = FrameLayout(mapContext)
@@ -206,7 +225,8 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!created) {
 
-            Mapbox.getInstance(mapContext, BuildConfig.MAPBOX_KEY, WellKnownTileServer.Mapbox)
+            val mapboxKeyProp = getProperty(mapContext, "persist.mapbox.key");
+            Mapbox.getInstance(mapContext, if (mapboxKeyProp.length != 0) mapboxKeyProp else BuildConfig.MAPBOX_KEY, WellKnownTileServer.Mapbox)
 
             if (savedInstanceState?.containsKey(BUNDLE_CAMERA_POSITION) == true) {
                 cameraPosition = savedInstanceState.getParcelable(BUNDLE_CAMERA_POSITION)!!
