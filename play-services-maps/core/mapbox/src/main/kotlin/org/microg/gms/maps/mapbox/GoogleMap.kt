@@ -23,6 +23,7 @@ import android.location.Location
 import android.os.*
 import androidx.annotation.IdRes
 import androidx.annotation.Keep
+import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -151,9 +152,9 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     init {
         BitmapDescriptorFactoryImpl.initialize(mapContext.resources, context.resources)
         LibraryLoader.setLibraryLoader(MultiArchLoader(mapContext, context))
-        val mapboxKeyProp = getProperty(mapContext, "persist.mapbox.key");
+        val mapboxKeySettings: String? = Settings.System.getString(mapContext.contentResolver, "persist.mapbox.key");
         runOnMainLooper {
-            Mapbox.getInstance(mapContext, if (mapboxKeyProp.length != 0) mapboxKeyProp else BuildConfig.MAPBOX_KEY , WellKnownTileServer.Mapbox)
+            Mapbox.getInstance(mapContext, if (mapboxKeySettings != null && mapboxKeySettings.length != 0) mapboxKeySettings else BuildConfig.MAPBOX_KEY , WellKnownTileServer.Mapbox)
         }
 
 
